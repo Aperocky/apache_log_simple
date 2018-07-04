@@ -10,6 +10,10 @@ I'll make this a pypl repository - working on it.
 
 `> log_processor $your_log_file $utility_command`
 
+example: 
+
+`log_processor ../access.log.2018-07-02 os_type_count`
+
 ## Utilities Command List.
 
 Command | Usage | Output
