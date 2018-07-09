@@ -7,9 +7,11 @@ Numerous function with specific goals are here
 
 """
 import os, sys
+import functools
 
 command_list = [
-    "unique_ips",
+    "unique_ip",
+    "unique_ip_sorted",
     "unique_ip_num",
     "os_type",
     "os_type_ip",
@@ -78,6 +80,17 @@ class LogReader:
             print("browser: " + line)
         return mozilla, os, system, chip, line
 
+    @staticmethod
+    def sort_ip(ip1, ip2):
+        ipf = [int(bit) for bit in ip1.split(".")]
+        ips = [int(bit) for bit in ip2.split(".")]
+        for i in range(4):
+            if ipf[i] < ips[i]:
+                return -1
+            elif ipf[i] > ips[i]:
+                return 1
+        return 1
+
 # prepare general function
 def prep():
     fn = sys.argv[1]
@@ -96,7 +109,7 @@ def FULL_LOG():
         print("\n")
 
 # Return a list of all unique IP in the log.
-def unique_ips():
+def unique_ip():
     lr = prep()
     uniset = set()
     while(True):
@@ -108,9 +121,14 @@ def unique_ips():
         uniset.add(ip)
     return list(uniset)
 
+def unique_ip_sorted():
+    uniset = unique_ip()
+    uniset.sort(key=functools.cmp_to_key(LogReader.sort_ip))
+    return uniset
+
 # Return number of all unique IP in the log
 def unique_ip_num():
-    return len(unique_ips())
+    return len(unique_ip())
 
 def os_type():
     lr = prep()
@@ -170,6 +188,9 @@ def os_type_count():
         else:
             newset["Others"] += v
     return newset
+
+# Lookup log records of ip, particularly
+def ip_lookup()
 
 if __name__ == "__main__":
     if len(sys.argv) < 3:
